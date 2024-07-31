@@ -59,24 +59,18 @@ public class App {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
 
         StringBuilder request = new StringBuilder();
-        boolean endOfRequest = false;
 
-        while (!endOfRequest && socketChannel.read(buffer) != -1) {
+        while (socketChannel.read(buffer) != -1) {
             buffer.flip();
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
             String data = new String(bytes, StandardCharsets.UTF_8);
             request.append(data);
 
-            // 检查是否读到了请求的结束标志
-            if (data.endsWith("\r\n\r\n")) {
-                endOfRequest = true;
-            }
-
             buffer.clear();
         }
 
-        if (endOfRequest) {
+        if (request.length() > 0) {
             // 处理请求
             processRequest(socketChannel, request.toString());
         }
@@ -108,7 +102,7 @@ public class App {
     }
 
     public static void main(String[] args) throws IOException {
-        int port = 8000;
+        int port = Integer.parseInt(System.getenv().getOrDefault("PORT", "8000"));
         new App(port).listen();
     }
 
