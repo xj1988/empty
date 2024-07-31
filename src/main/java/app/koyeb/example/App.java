@@ -10,13 +10,13 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
-public class Main {
+public class App {
 
     private final Selector selector;
 
     private final ServerSocketChannel serverSocketChannel;
 
-    public Main(int port) throws IOException {
+    public App(int port) throws IOException {
         selector = Selector.open();
 
         // 创建 ServerSocketChannel 并绑定到 8000 端口
@@ -109,7 +109,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         int port = 8000;
-        new Main(port).listen();
+        new App(port).listen();
     }
 
 }
