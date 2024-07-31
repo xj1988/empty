@@ -1,27 +1,22 @@
 package main
  
 import (
-    "net/http"
-    "github.com/gin-gonic/gin"
+	"fmt"
+	"net/http"
 )
- 
-// 初始化路由
-func setupRouter() *gin.Engine {
-	// 创建一个Gin引擎实例，并使用默认中间件
-    r := gin.Default() 
- 
-    // 定义一个GET路由，当访问/时返回"Hello, World!"
-    r.GET("/", func(c *gin.Context) {
-        c.String(http.StatusOK, "Hello, World!")
-    })
- 
-	// 返回初始化好的Gin引擎
-    return r 
+
+// 定义一个处理函数来响应 HTTP 请求
+func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World!")
 }
- 
+
 func main() {
-	// 调用初始化路由的函数
-    router := setupRouter() 
-	// 启动服务，默认在0.0.0.0:8080监听
-    router.Run() 
+	// 注册处理函数
+	http.HandleFunc("/", helloWorldHandler)
+
+	// 启动 HTTP 服务器，监听 8000 端口
+	fmt.Println("Starting server on :8000...")
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		fmt.Printf("Could not start server: %v\n", err)
+	}
 }
